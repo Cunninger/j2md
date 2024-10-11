@@ -1,0 +1,212 @@
+export default {
+  async fetch(request, env, ctx) {
+    const html = `
+<!DOCTYPE html>
+<html lang="zh-CN-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/x-icon;base64,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" type="image/x-icon">
+  <title>简易解析ChatGPT的对话JSON</title>
+  <style>
+    html {font-size: 16px;}
+    @media (max-width: 600px) {html {font-size: 14px;}}
+    body {margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;}
+    .container {
+      display: flex; flex-direction: column; align-items: center;
+      width: 100%; max-width: 800px; margin: 0 auto; padding: 2rem;
+      transition: padding 0.5s ease;
+    }
+    .container.loaded {align-items: flex-start; padding: 1rem;}
+    #title {
+      font-size: 2rem; text-align: center; margin-bottom: 2rem;
+      transition: all 0.5s ease;
+    }
+    .container.loaded #title {
+      font-size: 1.5rem; text-align: left; margin-bottom: 1rem;
+    }
+    .file-input-container {
+      display: flex; justify-content: center; align-items: center; margin-bottom: 2rem;
+      transition: opacity 0.5s ease;
+    }
+    .container.loaded .file-input-container {opacity: 0; height: 0; overflow: hidden; margin-bottom: 0;}
+    .file-input {
+      padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; border: 1px solid #ccc; border-radius: 0.25rem;
+      background-color: #f5f5f5; color: #333; transition: background-color 0.3s ease;
+    }
+    .file-input:hover {background-color: #e0e0e0;}
+    .message {
+      position: relative; background-color: rgba(255, 255, 255, 0.9); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem;
+      box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.05); word-wrap: break-word;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .system {background-color: rgba(255, 255, 255, 0.9);}
+    .user {background-color: rgba(255, 224, 178, 0.3);}
+    .tool {background-color: rgba(220, 237, 200, 0.3); cursor: pointer;}
+    .label {font-weight: bold; font-size: 1.1rem;}
+    .header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;}
+    .timestamp {font-size: 0.875rem; color: #666;}
+    .content {margin-top: 0.5rem; transition: max-height 0.3s ease;}
+    .collapsed .content {max-height: 6rem; overflow: hidden;}
+    .message.collapsed::after {
+      content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%;
+      background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.9));
+      pointer-events: none;
+      border-bottom-left-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+    }
+    pre {background-color: #f0f0f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; position: relative;}
+    .copy-button {
+      position: absolute; top: 0.5rem; right: 0.5rem; padding: 0.2rem 0.5rem; font-size: 0.875rem;
+      background-color: #e0e0e0; border: none; border-radius: 0.25rem; cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      z-index: 1;
+    }
+    .copy-button:hover {background-color: #d5d5d5;}
+    .copy-button.copied {
+      background-color: #a5d6a7;
+      transform: scale(1.1);
+    }
+    #title-container {
+      display: flex; justify-content: center; align-items: center; width: 100%;
+      transition: all 0.5s ease;
+    }
+    .hidden {display: none;}
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <div id="title-container">
+      <h1 id="title">简易解析ChatGPT的对话JSON</h1>
+    </div>
+    <div class="file-input-container">
+      <input type="file" id="fileInput" class="file-input" accept=".json" />
+    </div>
+    <div id="content"></div>
+  </div>
+  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script defer>
+    function formatTimestamp(ts) {
+      const date = new Date(ts * 1000);
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      const hh = String(date.getHours()).padStart(2, '0');
+      const mm = String(date.getMinutes()).padStart(2, '0');
+      const ss = String(date.getSeconds()).padStart(2, '0');
+      return \`\${y}年\${m}月\${d}日 \${hh}:\${mm}:\${ss}\`;
+    }
+
+    function addCopyButtons() {
+      const pres = document.querySelectorAll('pre');
+      pres.forEach(pre => {
+        const code = pre.querySelector('code');
+        if (code) {
+          const button = document.createElement('button');
+          button.classList.add('copy-button');
+          button.textContent = 'Copy';
+          button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            navigator.clipboard.writeText(code.textContent).then(() => {
+              button.textContent = 'Copied!';
+              button.classList.add('copied');
+              setTimeout(() => {
+                button.textContent = 'Copy';
+                button.classList.remove('copied');
+              }, 2000);
+            });
+          });
+          pre.appendChild(button);
+        }
+      });
+    }
+
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const json = JSON.parse(e.target.result);
+          const messages = json.messages || [];
+          const contentDiv = document.getElementById('content');
+          contentDiv.innerHTML = '';
+          messages.forEach(msg => {
+            const role = msg.author.role;
+            const parts = msg.content.parts || [];
+            const createTime = msg.create_time;
+            const timeStr = createTime ? formatTimestamp(createTime) : '';
+            parts.forEach(part => {
+              if (part.trim() === '') return;
+              const messageDiv = document.createElement('div');
+              messageDiv.classList.add('message');
+              let label = '';
+              if (role === 'system' || role === 'assistant') {messageDiv.classList.add('system'); label = 'ChatGPT';}
+              else if (role === 'user') {messageDiv.classList.add('user'); label = 'User';}
+              else if (role === 'tool') {messageDiv.classList.add('tool'); label = '(思考 ChatGPT)';}
+              const headerDiv = document.createElement('div');
+              headerDiv.classList.add('header');
+              const labelDiv = document.createElement('div');
+              labelDiv.classList.add('label');
+              labelDiv.textContent = label;
+              const timeDiv = document.createElement('div');
+              timeDiv.classList.add('timestamp');
+              timeDiv.textContent = timeStr;
+              headerDiv.appendChild(labelDiv);
+              headerDiv.appendChild(timeDiv);
+              const contentDivInner = document.createElement('div');
+              contentDivInner.classList.add('content');
+              contentDivInner.innerHTML = marked.parse(part);
+              messageDiv.appendChild(headerDiv);
+              messageDiv.appendChild(contentDivInner);
+              if (role === 'tool') {
+                messageDiv.classList.add('collapsed');
+                messageDiv.addEventListener('click', function() {
+                  if (messageDiv.classList.contains('collapsed')) {
+                    const contentHeight = contentDivInner.scrollHeight;
+                    contentDivInner.style.maxHeight = contentHeight + 'px';
+                    messageDiv.classList.remove('collapsed');
+                    contentDivInner.addEventListener('transitionend', function handler() {
+                      messageDiv.style.setProperty('--mask-display', 'none');
+                      messageDiv.removeEventListener('transitionend', handler);
+                    });
+                  } else {
+                    const currentHeight = contentDivInner.scrollHeight;
+                    contentDivInner.style.maxHeight = currentHeight + 'px';
+                    void contentDivInner.offsetHeight;
+                    contentDivInner.style.maxHeight = '6rem';
+                    messageDiv.classList.add('collapsed');
+                  }
+                });
+              }
+              contentDiv.appendChild(messageDiv);
+            });
+          });
+          const container = document.getElementById('container');
+          container.classList.add('loaded');
+          addCopyButtons();
+        } catch (err) {
+          alert('无效的JSON文件');
+        }
+      };
+      reader.readAsText(file);
+
+      const title = document.getElementById('title');
+      const titleContainer = document.getElementById('title-container');
+      titleContainer.style.transition = 'all 0.5s ease';
+      titleContainer.style.display = 'flex';
+      titleContainer.style.justifyContent = 'center';
+      titleContainer.style.alignItems = 'center';
+      setTimeout(() => {
+        titleContainer.style.justifyContent = 'flex-start';
+      }, 10);
+    });
+  </script>
+</body>
+</html>`;
+    return new Response(html, {
+      headers: { 'Content-Type': 'text/html' },
+    });
+  },
+};
