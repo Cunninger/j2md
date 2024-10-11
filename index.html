@@ -1,12 +1,14 @@
-export default {
-  async fetch(request, env, ctx) {
-    const html = `
+
 <!DOCTYPE html>
 <html lang="zh-CN-Hans">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="dns-prefetch" href="https://cdnjs.com">
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
   <link rel="icon" href="data:image/x-icon;base64,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" type="image/x-icon">
+  <meta http-equiv="x-dns-prefetch-control" content="on" />
   <title>简易解析ChatGPT的对话JSON</title>
   <style>
     html {font-size: 16px;}
@@ -15,19 +17,14 @@ export default {
     .container {
       display: flex; flex-direction: column; align-items: center;
       width: 100%; max-width: 800px; margin: 0 auto; padding: 2rem;
-      transition: padding 0.5s ease;
+      transition: padding 0.7s ease;
     }
     .container.loaded {align-items: flex-start; padding: 1rem;}
-    #title {
-      font-size: 2rem; text-align: center; margin-bottom: 2rem;
-      transition: all 0.5s ease;
-    }
-    .container.loaded #title {
-      font-size: 1.5rem; text-align: left; margin-bottom: 1rem;
-    }
+    #title {font-size: 2rem; text-align: center; margin-bottom: 2rem; transition: all 0.7s ease;}
+    .container.loaded #title {font-size: 1.5rem; text-align: left; margin-bottom: 1rem;}
     .file-input-container {
       display: flex; justify-content: center; align-items: center; margin-bottom: 2rem;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.7s ease;
     }
     .container.loaded .file-input-container {opacity: 0; height: 0; overflow: hidden; margin-bottom: 0;}
     .file-input {
@@ -37,26 +34,25 @@ export default {
     .file-input:hover {background-color: #e0e0e0;}
     .message {
       position: relative; background-color: rgba(255, 255, 255, 0.9); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem;
-      box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.05); word-wrap: break-word;
-      overflow: hidden;
+      box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.05); word-wrap: break-word; overflow: hidden;
       transition: max-height 0.3s ease;
     }
     .system {background-color: rgba(255, 255, 255, 0.9);}
     .user {background-color: rgba(255, 224, 178, 0.3);}
     .tool {background-color: rgba(220, 237, 200, 0.3); cursor: pointer;}
-    .label {font-weight: bold; font-size: 1.1rem;}
+    .label {font-weight: bold; font-size: 1.2rem;}
     .header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;}
     .timestamp {font-size: 0.875rem; color: #666;}
     .content {margin-top: 0.5rem; transition: max-height 0.3s ease;}
     .collapsed .content {max-height: 6rem; overflow: hidden;}
     .message.collapsed::after {
       content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%;
-      background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.9));
+      background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.8));
       pointer-events: none;
-      border-bottom-left-radius: 0.5rem;
-      border-bottom-right-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;
     }
-    pre {background-color: #f0f0f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; position: relative;}
+    pre {background-color: #FAFAFA !important; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; position: relative; max-width: 100%;}
+    code {display: block; white-space: pre-wrap;}
     .copy-button {
       position: absolute; top: 0.5rem; right: 0.5rem; padding: 0.2rem 0.5rem; font-size: 0.875rem;
       background-color: #e0e0e0; border: none; border-radius: 0.25rem; cursor: pointer;
@@ -64,16 +60,18 @@ export default {
       z-index: 1;
     }
     .copy-button:hover {background-color: #d5d5d5;}
-    .copy-button.copied {
-      background-color: #a5d6a7;
-      transform: scale(1.1);
-    }
-    #title-container {
-      display: flex; justify-content: center; align-items: center; width: 100%;
-      transition: all 0.5s ease;
-    }
+    .copy-button.copied {background-color: #a5d6a7; transform: scale(1.1);}
+    #title-container {display: flex; justify-content: center; align-items: center; width: 100%; transition: all 0.7s ease;}
     .hidden {display: none;}
+    /* You can choose different themes from https://cdnjs.com/libraries/highlight.js */
+    .hljs {
+      background-color: #FAFAFA !important;
+      display: block; overflow-x: auto;
+      padding: 0.5rem; background: #FAFAFA; border-radius: 0.5rem;
+    }
+    pre {max-width: 100%; box-sizing: border-box;}
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
 </head>
 <body>
   <div class="container" id="container">
@@ -85,8 +83,10 @@ export default {
     </div>
     <div id="content"></div>
   </div>
-  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script defer>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
     function formatTimestamp(ts) {
       const date = new Date(ts * 1000);
       const y = date.getFullYear();
@@ -95,7 +95,7 @@ export default {
       const hh = String(date.getHours()).padStart(2, '0');
       const mm = String(date.getMinutes()).padStart(2, '0');
       const ss = String(date.getSeconds()).padStart(2, '0');
-      return \`\${y}年\${m}月\${d}日 \${hh}:\${mm}:\${ss}\`;
+      return `${y}年${m}月${d}日 ${hh}:${mm}:${ss}`;
     }
 
     function addCopyButtons() {
@@ -110,6 +110,13 @@ export default {
             event.stopPropagation();
             navigator.clipboard.writeText(code.textContent).then(() => {
               button.textContent = 'Copied!';
+              button.classList.add('copied');
+              setTimeout(() => {
+                button.textContent = 'Copy';
+                button.classList.remove('copied');
+              }, 2000);
+            }).catch(() => {
+              button.textContent = 'Failed!';
               button.classList.add('copied');
               setTimeout(() => {
                 button.textContent = 'Copy';
@@ -157,23 +164,25 @@ export default {
               headerDiv.appendChild(timeDiv);
               const contentDivInner = document.createElement('div');
               contentDivInner.classList.add('content');
-              contentDivInner.innerHTML = marked.parse(part);
+              contentDivInner.innerHTML = marked.parse(part, {
+                highlight: function(code, lang) {
+                  if (lang && hljs.getLanguage(lang)) {
+                    return hljs.highlight(code, { language: lang }).value;
+                  } else {
+                    return hljs.highlightAuto(code).value;
+                  }
+                }
+              });
               messageDiv.appendChild(headerDiv);
               messageDiv.appendChild(contentDivInner);
               if (role === 'tool') {
                 messageDiv.classList.add('collapsed');
                 messageDiv.addEventListener('click', function() {
                   if (messageDiv.classList.contains('collapsed')) {
-                    const contentHeight = contentDivInner.scrollHeight;
-                    contentDivInner.style.maxHeight = contentHeight + 'px';
+                    contentDivInner.style.maxHeight = contentDivInner.scrollHeight + 'px';
                     messageDiv.classList.remove('collapsed');
-                    contentDivInner.addEventListener('transitionend', function handler() {
-                      messageDiv.style.setProperty('--mask-display', 'none');
-                      messageDiv.removeEventListener('transitionend', handler);
-                    });
                   } else {
-                    const currentHeight = contentDivInner.scrollHeight;
-                    contentDivInner.style.maxHeight = currentHeight + 'px';
+                    contentDivInner.style.maxHeight = contentDivInner.scrollHeight + 'px';
                     void contentDivInner.offsetHeight;
                     contentDivInner.style.maxHeight = '6rem';
                     messageDiv.classList.add('collapsed');
@@ -186,15 +195,15 @@ export default {
           const container = document.getElementById('container');
           container.classList.add('loaded');
           addCopyButtons();
+          hljs.highlightAll();
         } catch (err) {
           alert('无效的JSON文件');
         }
       };
       reader.readAsText(file);
 
-      const title = document.getElementById('title');
       const titleContainer = document.getElementById('title-container');
-      titleContainer.style.transition = 'all 0.5s ease';
+      titleContainer.style.transition = 'all 0.7s ease';
       titleContainer.style.display = 'flex';
       titleContainer.style.justifyContent = 'center';
       titleContainer.style.alignItems = 'center';
@@ -203,10 +212,6 @@ export default {
       }, 10);
     });
   </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"8d0be7f389a30974","version":"2024.10.1","r":1,"token":"2d1f105c765842d287d6d1a5e971f751","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}}}' crossorigin="anonymous"></script>
 </body>
-</html>`;
-    return new Response(html, {
-      headers: { 'Content-Type': 'text/html' },
-    });
-  },
-};
+</html>
