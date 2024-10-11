@@ -1,175 +1,217 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN-Hans">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatGPT Conversation Parser</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        .container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        h1 {
-            margin-bottom: 2rem;
-        }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-        .button {
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        #uploadBtn {
-            background-color: #333;
-            color: white;
-        }
-        #uploadBtn:hover {
-            background-color: #555;
-        }
-        #downloadBtn {
-            background-color: #ccc;
-            color: #333;
-        }
-        #downloadBtn:hover {
-            background-color: #ddd;
-        }
-        #fileInput {
-            display: none;
-        }
-        .drag-area {
-            border: 2px dashed #ccc;
-            border-radius: 5px;
-            padding: 2rem;
-            margin-top: 2rem;
-            transition: border-color 0.3s;
-        }
-        .drag-area.active {
-            border-color: #333;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="dns-prefetch" href="https://cdnjs.com">
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="icon" href="data:image/x-icon;base64,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" type="image/x-icon">
+  <meta http-equiv="x-dns-prefetch-control" content="on" />
+  <title>简易解析ChatGPT的对话JSON</title>
+  <style>
+    html {font-size: 16px;}
+    @media (max-width: 600px) {html {font-size: 14px;}}
+    body {margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;}
+    .container {
+      display: flex; flex-direction: column; align-items: center;
+      width: 100%; max-width: 800px; margin: 0 auto; padding: 2rem;
+      transition: padding 0.7s ease;
+    }
+    .container.loaded {align-items: flex-start; padding: 1rem;}
+    #title {font-size: 2rem; text-align: center; margin-bottom: 2rem; transition: all 0.7s ease;}
+    .container.loaded #title {font-size: 1.5rem; text-align: left; margin-bottom: 1rem;}
+    .file-input-container {
+      display: flex; justify-content: center; align-items: center; margin-bottom: 2rem;
+      transition: opacity 0.7s ease;
+    }
+    .container.loaded .file-input-container {opacity: 0; height: 0; overflow: hidden; margin-bottom: 0;}
+    .file-input {
+      padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; border: 1px solid #ccc; border-radius: 0.25rem;
+      background-color: #f5f5f5; color: #333; transition: background-color 0.3s ease;
+    }
+    .file-input:hover {background-color: #e0e0e0;}
+    .message {
+      position: relative; background-color: rgba(255, 255, 255, 0.9); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem;
+      box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.05); word-wrap: break-word; overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .system {background-color: rgba(255, 255, 255, 0.9);}
+    .user {background-color: rgba(255, 224, 178, 0.3);}
+    .tool {background-color: rgba(220, 237, 200, 0.3); cursor: pointer;}
+    .label {font-weight: bold; font-size: 1.2rem;}
+    .header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;}
+    .timestamp {font-size: 0.875rem; color: #666;}
+    .content {margin-top: 0.5rem; transition: max-height 0.3s ease;}
+    .collapsed .content {max-height: 6rem; overflow: hidden;}
+    .message.collapsed::after {
+      content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%;
+      background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.8));
+      pointer-events: none;
+      border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;
+    }
+    pre {background-color: #FAFAFA !important; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; position: relative; max-width: 100%;}
+    code {display: block; white-space: pre-wrap;}
+    .copy-button {
+      position: absolute; top: 0.5rem; right: 0.5rem; padding: 0.2rem 0.5rem; font-size: 0.875rem;
+      background-color: #e0e0e0; border: none; border-radius: 0.25rem; cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      z-index: 1;
+    }
+    .copy-button:hover {background-color: #d5d5d5;}
+    .copy-button.copied {background-color: #a5d6a7; transform: scale(1.1);}
+    #title-container {display: flex; justify-content: center; align-items: center; width: 100%; transition: all 0.7s ease;}
+    .hidden {display: none;}
+    /* You can choose different themes from https://cdnjs.com/libraries/highlight.js */
+    .hljs {
+      background-color: #FAFAFA !important;
+      display: block; overflow-x: auto;
+      padding: 0.5rem; background: #FAFAFA; border-radius: 0.5rem;
+    }
+    pre {max-width: 100%; box-sizing: border-box;}
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
 </head>
 <body>
-    <div class="container">
-        <h1>ChatGPT Conversation Parser</h1>
-        <div class="button-container">
-            <button id="uploadBtn" class="button">Upload JSON</button>
-            <button id="downloadBtn" class="button" disabled>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-top; margin-right: 5px;">
-                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                </svg>
-                Download Markdown
-            </button>
-        </div>
-        <input type="file" id="fileInput" accept=".json">
-        <div id="dragArea" class="drag-area">
-            <p>Drag and drop your JSON file here</p>
-        </div>
+  <div class="container" id="container">
+    <div id="title-container">
+      <h1 id="title">简易解析ChatGPT的对话JSON</h1>
     </div>
+    <div class="file-input-container">
+      <input type="file" id="fileInput" class="file-input" accept=".json" />
+    </div>
+    <div id="content"></div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+    function formatTimestamp(ts) {
+      const date = new Date(ts * 1000);
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      const hh = String(date.getHours()).padStart(2, '0');
+      const mm = String(date.getMinutes()).padStart(2, '0');
+      const ss = String(date.getSeconds()).padStart(2, '0');
+      return `${y}年${m}月${d}日 ${hh}:${mm}:${ss}`;
+    }
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script>
-        const uploadBtn = document.getElementById('uploadBtn');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const fileInput = document.getElementById('fileInput');
-        const dragArea = document.getElementById('dragArea');
-        let markdownContent = '';
-
-        uploadBtn.addEventListener('click', () => fileInput.click());
-
-        fileInput.addEventListener('change', handleFile);
-
-        downloadBtn.addEventListener('click', () => {
-            const blob = new Blob([markdownContent], { type: 'text/markdown' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'conversation.md';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        });
-
-        dragArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dragArea.classList.add('active');
-        });
-
-        dragArea.addEventListener('dragleave', () => {
-            dragArea.classList.remove('active');
-        });
-
-        dragArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dragArea.classList.remove('active');
-            const file = e.dataTransfer.files[0];
-            if (file && file.type === 'application/json') {
-                handleFile({ target: { files: [file] } });
-            } else {
-                alert('Please upload a JSON file.');
-            }
-        });
-
-        function handleFile(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const json = JSON.parse(e.target.result);
-                        markdownContent = generateMarkdown(json.messages || []);
-                        downloadBtn.disabled = false;
-                        alert('JSON file parsed successfully. You can now download the Markdown file.');
-                    } catch (err) {
-                        alert('Invalid JSON file');
-                    }
-                };
-                reader.readAsText(file);
-            }
-        }
-
-        function generateMarkdown(messages) {
-            let markdown = '';
-            messages.forEach(msg => {
-                const role = msg.author.role;
-                const parts = msg.content.parts || [];
-                const createTime = msg.create_time;
-                const timeStr = createTime ? formatTimestamp(createTime) : '';
-                parts.forEach(part => {
-                    if (part.trim() === '') return;
-                    let label = '';
-                    if (role === 'system' || role === 'assistant') label = 'ChatGPT';
-                    else if (role === 'user') label = 'User';
-                    else if (role === 'tool') label = '(Thinking ChatGPT)';
-                    markdown += `## ${label} (${timeStr})\n\n${part}\n\n`;
-                });
+    function addCopyButtons() {
+      const pres = document.querySelectorAll('pre');
+      pres.forEach(pre => {
+        const code = pre.querySelector('code');
+        if (code) {
+          const button = document.createElement('button');
+          button.classList.add('copy-button');
+          button.textContent = 'Copy';
+          button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            navigator.clipboard.writeText(code.textContent).then(() => {
+              button.textContent = 'Copied!';
+              button.classList.add('copied');
+              setTimeout(() => {
+                button.textContent = 'Copy';
+                button.classList.remove('copied');
+              }, 2000);
+            }).catch(() => {
+              button.textContent = 'Failed!';
+              button.classList.add('copied');
+              setTimeout(() => {
+                button.textContent = 'Copy';
+                button.classList.remove('copied');
+              }, 2000);
             });
-            return markdown;
+          });
+          pre.appendChild(button);
         }
+      });
+    }
 
-        function formatTimestamp(ts) {
-            const date = new Date(ts * 1000);
-            return date.toLocaleString();
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const json = JSON.parse(e.target.result);
+          const messages = json.messages || [];
+          const contentDiv = document.getElementById('content');
+          contentDiv.innerHTML = '';
+          messages.forEach(msg => {
+            const role = msg.author.role;
+            const parts = msg.content.parts || [];
+            const createTime = msg.create_time;
+            const timeStr = createTime ? formatTimestamp(createTime) : '';
+            parts.forEach(part => {
+              if (part.trim() === '') return;
+              const messageDiv = document.createElement('div');
+              messageDiv.classList.add('message');
+              let label = '';
+              if (role === 'system' || role === 'assistant') {messageDiv.classList.add('system'); label = 'ChatGPT';}
+              else if (role === 'user') {messageDiv.classList.add('user'); label = 'User';}
+              else if (role === 'tool') {messageDiv.classList.add('tool'); label = '(思考 ChatGPT)';}
+              const headerDiv = document.createElement('div');
+              headerDiv.classList.add('header');
+              const labelDiv = document.createElement('div');
+              labelDiv.classList.add('label');
+              labelDiv.textContent = label;
+              const timeDiv = document.createElement('div');
+              timeDiv.classList.add('timestamp');
+              timeDiv.textContent = timeStr;
+              headerDiv.appendChild(labelDiv);
+              headerDiv.appendChild(timeDiv);
+              const contentDivInner = document.createElement('div');
+              contentDivInner.classList.add('content');
+              contentDivInner.innerHTML = marked.parse(part, {
+                highlight: function(code, lang) {
+                  if (lang && hljs.getLanguage(lang)) {
+                    return hljs.highlight(code, { language: lang }).value;
+                  } else {
+                    return hljs.highlightAuto(code).value;
+                  }
+                }
+              });
+              messageDiv.appendChild(headerDiv);
+              messageDiv.appendChild(contentDivInner);
+              if (role === 'tool') {
+                messageDiv.classList.add('collapsed');
+                messageDiv.addEventListener('click', function() {
+                  if (messageDiv.classList.contains('collapsed')) {
+                    contentDivInner.style.maxHeight = contentDivInner.scrollHeight + 'px';
+                    messageDiv.classList.remove('collapsed');
+                  } else {
+                    contentDivInner.style.maxHeight = contentDivInner.scrollHeight + 'px';
+                    void contentDivInner.offsetHeight;
+                    contentDivInner.style.maxHeight = '6rem';
+                    messageDiv.classList.add('collapsed');
+                  }
+                });
+              }
+              contentDiv.appendChild(messageDiv);
+            });
+          });
+          const container = document.getElementById('container');
+          container.classList.add('loaded');
+          addCopyButtons();
+          hljs.highlightAll();
+        } catch (err) {
+          alert('无效的JSON文件');
         }
-    </script>
+      };
+      reader.readAsText(file);
+
+      const titleContainer = document.getElementById('title-container');
+      titleContainer.style.transition = 'all 0.7s ease';
+      titleContainer.style.display = 'flex';
+      titleContainer.style.justifyContent = 'center';
+      titleContainer.style.alignItems = 'center';
+      setTimeout(() => {
+        titleContainer.style.justifyContent = 'flex-start';
+      }, 10);
+    });
+  </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"8d0be7f389a30974","version":"2024.10.1","r":1,"token":"2d1f105c765842d287d6d1a5e971f751","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}}}' crossorigin="anonymous"></script>
 </body>
 </html>
